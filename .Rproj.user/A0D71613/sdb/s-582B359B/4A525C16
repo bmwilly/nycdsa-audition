@@ -1,14 +1,14 @@
 {
-    "contents" : "",
+    "contents" : "library(readr)\nlibrary(plyr)\nlibrary(dplyr)\nlibrary(cowplot)\n\n?read_csv\ndaily_show_data <- read_csv(\"~/projects/data/daily-show-guests/daily_show_guests.csv\")\nproblems(daily_show_data)\n\ndaily_show_data <- read_csv(\"~/projects/data/daily-show-guests/daily_show_guests.csv\", \n                            col_types = cols(Show = col_date(\"%m/%d/%y\")))\nproblems(daily_show_data)\nhead(daily_show_data)\n?head\nclass(daily_show_data)\n?head.data.frame\nhead(daily_show_data, n = 10)\nsummary(daily_show_data)\n\ndf <- daily_show_data\nunique(df$Group)\ndf$Group[df$Group == \"media\"] <- \"Media\"\ndf$Group[(is.na(df$Group)) | (df$Group == \"Misc\")] <- \"Other\"\n\ndf <- df %>% \n  group_by(Group) %>% \n  summarize(n = n())\n\nhead(df)\nunique(df$Group)\ndf$Group <- factor(df$Group, levels = df$Group[order(df$n)])\ndf$Group <- factor(df$Group, \n                   levels = c(\"Other\", \n                              levels(df$Group)[levels(df$Group) != \"Other\"]))\n\nggplot(df, aes(Group, n)) + \n  geom_bar(stat = \"identity\") + \n  coord_flip() + \n  scale_y_continuous(expand = c(0, 0)) + \n  theme(axis.ticks = element_blank())\n\n",
     "created" : 1460940526941.000,
-    "dirty" : true,
-    "encoding" : "",
+    "dirty" : false,
+    "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "817119174",
     "id" : "4A525C16",
-    "lastKnownWriteTime" : 4299745376,
-    "path" : null,
-    "project_path" : null,
+    "lastKnownWriteTime" : 1460955770,
+    "path" : "~/projects/nycdsa-audition/daily-show.R",
+    "project_path" : "daily-show.R",
     "properties" : {
         "tempName" : "Untitled1"
     },
