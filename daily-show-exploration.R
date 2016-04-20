@@ -24,9 +24,11 @@ summary(daily_show_data)
 ds_data <- daily_show_data 
 colnames(ds_data) <- tolower(colnames(ds_data))
 head(ds_data)
+rename(ds_data, ...)
 ds_data <- ds_data %>% 
   rename(occupation = googleknowlege_occupation, date = show, 
-         guest = raw_guest_list)
+         guest = raw_guest_list) 
+  
 unique(ds_data$group)
 ds_data$group[ds_data$group == "media"] <- "Media"
 ds_data %>% 
@@ -34,23 +36,35 @@ ds_data %>%
 ds_data$group[(is.na(ds_data$group)) | (ds_data$group == "Misc")] <- "Other"
 
 head(ds_data)
+head(df)
 df <- ds_data %>% 
   group_by(group) %>% 
   summarize(n = n())
 
 
+?summarize
+head(ds_data)
+
+ggplot(ds_data, aes(year)) + 
+  geom_bar(aes(fill = group), position = "identity")
+
 ## Plot counts by occupation 
 head(df)
 unique(df$group)
 df$group <- factor(df$group, levels = df$group[order(df$n)])
+levels(df$group)
 df$group <- factor(df$group, 
                    levels = c("Other", 
                               levels(df$group)[levels(df$group) != "Other"]))
 
+
+ggplot(df, aes(factor(1))) + 
+  geom_bar(aes(fill = group, stat = "identity"), position = "stack")
+
 ggplot(df, aes(group, n)) + 
   geom_bar(stat = "identity") + 
   coord_flip() + 
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 1010)) + 
+  scale_y_continuous(limits = c(0, 1010), expand = c(0, 0)) + 
   labs(title = "Number of Daily show guests by occupation", x = "", y = "") + 
   theme(axis.ticks = element_blank())
 
@@ -63,6 +77,7 @@ df <- ds_data %>%
 df$group[df$old_group %in% c("Acting", "Comedy", "Musician")] <- "Acting, Comedy & Music"
 df$group[df$old_group == "Media"] <- "Media"
 df$group[df$old_group %in% c("Government", "Politician", "Political Aide")] <- "Government and Politics"
+unique(df$group)
 
 df <- df %>% 
   group_by(year, group) %>% 
