@@ -1,6 +1,6 @@
 .PHONY: all
 
-DATA=../data/daily-show-guests
+DATA=./data
 OUTPUT=./output
 
 run-analysis:
